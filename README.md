@@ -6,4 +6,4 @@
 </br>Calvin Cruso
 </br>Jonah Smith
 </br>Cristopher Stripoli</br>
-###Technologies Used </br>
+###Technologies Used 
