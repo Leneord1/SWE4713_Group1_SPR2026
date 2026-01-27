@@ -19,5 +19,9 @@ Database- Azure DBA
 Open a command terminal
 npm install to install Node.JS and the necessary libraries
 npm -v to check NPM version; version 11.6 or higher
-node -v to check Node version; version 24.6 or higher 
+node -v to check Node version; version 24.6 or higher
+~~~
+## Github Rules
+~~~
+As of right now, I don't have any workflows setup, so all code should be uploaded to a personal branch then merged to develop.  
 ~~~
