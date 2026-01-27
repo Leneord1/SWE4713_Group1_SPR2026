@@ -6,4 +6,4 @@ Team Scribe- Elijah Giusto
 Calvin Cruso
 Jonah Smith
 Cristopher Stripoli
-**_Technologies Used _**
+## Technologies Used 
