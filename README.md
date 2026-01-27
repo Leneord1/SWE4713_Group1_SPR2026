@@ -5,5 +5,5 @@
 </br>Team Scribe- Elijah Giusto
 </br>Calvin Cruso
 </br>Jonah Smith
-</br>Cristopher Stripoli</br>
+</br>Cristopher Stripoli
 **_Technologies Used _**
