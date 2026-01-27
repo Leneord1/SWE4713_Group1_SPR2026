@@ -1,9 +1,9 @@
 ## SWE4713_Group1_SPR2026
 </br>
 # Team Members
-</br>Team Lead- Sankalp Amaravadi</br>
-</br>Team Scribe- Elijah Giusto</br>
-</br>Calvin Cruso</br>
-</br>Jonah Smith</br>
-</br>Cristopher Stripoli</br>
+</br>Team Lead- Sankalp Amaravadi
+</br>Team Scribe- Elijah Giusto
+</br>Calvin Cruso
+</br>Jonah Smith
+</br>Cristopher Stripoli
 # Technologies Used </br>
