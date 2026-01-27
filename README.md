@@ -1,6 +1,6 @@
 # SWE4713_Group1_SPR2026
 </br>
-**_Team Members_**
+## Team Members
 </br>Team Lead- Sankalp Amaravadi
 </br>Team Scribe- Elijah Giusto
 </br>Calvin Cruso
