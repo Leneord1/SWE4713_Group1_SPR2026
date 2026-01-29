@@ -13,6 +13,7 @@ Cristopher Stripoli
 Frontend- React.JS
 APIs- Node.JS
 Database- Azure DBA
+Testing- Vite and Playwright
 ~~~
 ## Getting started
 ~~~
