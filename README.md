@@ -25,7 +25,5 @@ Once verified, pull the code from the GitHub repository by whatever means your I
 ~~~
 ## Github Rules
 ~~~
-As of right now, I don't have any workflows setup, so all code should be uploaded to a personal branch then merged to develop.  
-
 Once the workflows are setup, upload the code to your repository, wait for the tests to complete.  If they have passed, merge to develop.  
 ~~~
