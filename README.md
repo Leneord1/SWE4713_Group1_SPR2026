@@ -14,6 +14,7 @@ Frontend- React.JS
 APIs- Node.JS
 Database- Azure DBA
 Testing- Vite and Playwright
+Webhosting- 
 ~~~
 ## Getting started for the first time
 ~~~
@@ -25,5 +26,6 @@ Once verified, pull the code from the GitHub repository by whatever means your I
 ~~~
 ## Github Rules
 ~~~
-Upload the code to your branch, wait for the tests to complete.  If they have passed, merge to develop.  
+Upload the code to your branch, wait for the tests to complete.
+If they have passed, merge to develop.  
 ~~~
