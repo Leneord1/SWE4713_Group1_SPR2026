@@ -14,7 +14,7 @@ Frontend- React.JS
 APIs- Node.JS
 Database- Azure DBA
 Testing- Vite and Playwright
-Webhosting- 
+Webhosting- Azure
 ~~~
 ## Getting started for the first time
 ~~~
