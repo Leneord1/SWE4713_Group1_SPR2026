@@ -12,9 +12,9 @@ QA/Front end support- Cristopher Stripoli
 ~~~
 Frontend- React.JS
 APIs- Node.JS
-Database- Azure DBA
+Database- AWS DBA
 Testing- Vite and Playwright
-Webhosting- Azure
+Webhosting- AWS
 ~~~
 ## Getting started for the first time
 ~~~
