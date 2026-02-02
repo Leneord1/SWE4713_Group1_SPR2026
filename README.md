@@ -3,10 +3,10 @@
 ## Team Members
 ~~~
 Team Lead- Sankalp Amaravadi 
-Team Scribe- Elijah Giusto 
-Calvin Cruso
-Jonah Smith
-Cristopher Stripoli
+Team Scribe/ Back end lead- Elijah Giusto 
+Team support- Calvin Cruso
+Front ened lead- Jonah Smith
+QA/Front end support- Cristopher Stripoli
 ~~~
 ## Technologies Used 
 ~~~
