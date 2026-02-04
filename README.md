@@ -16,6 +16,10 @@ Database- AWS DBA
 Testing- Vite and Playwright
 Webhosting- AWS
 ~~~
+## Node JS Packages
+~~~
+nodemailer
+~~~
 ## Getting started for the first time
 ~~~
 Open a command terminal
