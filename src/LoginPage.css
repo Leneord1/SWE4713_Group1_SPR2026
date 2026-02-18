@@ -1,0 +1,99 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial;
+  background: #f5f7fb;
+  color: #111827;
+}
+
+.login-header {
+  height: 72px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.logo-placeholder {
+  width: 120px;
+  height: 40px;
+  background: linear-gradient(90deg,#e2e8f0,#cbd5e1);
+  border-radius: 6px;
+}
+
+.login-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-form {
+  width: 380px;
+  background: #ffffff;
+  padding: 28px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(16,24,40,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.login-form h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.login-form p {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+
+.login-form h5{
+  font-size: 17px;
+  color: #6b7280;
+  margin-top: 6px; /* reduced from 12px to bring header closer to preceding elements */
+  margin-bottom: 4px; /* small bottom margin so the input sits closer to the header */
+  padding: 0 4px;
+}
+.input {
+  height: 44px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #e6eef6;
+  background: #fbfdff;
+  font-size: 14px;
+}
+
+.input:focus {
+  outline: 2px solid #c7e0ff;
+  border-color: #90bfff;
+}
+
+.button-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  justify-content: space-between;
+}
+
+.button-row button {
+  min-width: 64px;
+  height: 40px;
+  border-radius: 8px;
+  border: 1px dashed #cbd5e1;
+  background: transparent;
+  cursor: pointer;
+  padding: 0 12px;
+}
+
+.button-row button:nth-child(2) {
+  min-width: 16px;
+  padding: 0 16px;
+}
+
+.button-row button:focus {
+  outline: 2px solid #c7e0ff;
+}
