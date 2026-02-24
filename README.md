@@ -11,8 +11,9 @@ QA/Front end support- Cristopher Stripoli
 ## Technologies Used 
 ~~~
 Frontend- React.JS
-APIs- Node.JS
-Database- AWS DBA
+Backend- Node.JS
+APIs- Rest
+Database- Supabase
 Testing- Vite and Playwright
 Webhosting- AWS
 ~~~
