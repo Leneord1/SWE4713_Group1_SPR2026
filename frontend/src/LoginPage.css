@@ -1,0 +1,143 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial;
+  background: #f5f7fb;
+  color: #111827;
+}
+
+.login-header {
+  height: 96px; /* increased to fit larger logo */
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.logo {
+  width: 250px;
+  height: 96px;
+  background: linear-gradient(90deg,#e2e8f0,#cbd5e1);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto; /* let the image keep aspect ratio */
+  height: auto;
+  object-fit: contain;
+}
+
+.login-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-form {
+  width: 380px;
+  background: #ffffff;
+  padding: 28px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(16,24,40,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.login-form h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.login-form p {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+
+.login-form h5{
+  font-size: 17px;
+  color: #6b7280;
+  margin-top: 4px;
+  margin-bottom: 2px;
+  padding: 0 4px;
+}
+.input {
+  height: 44px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #e6eef6;
+  background: #fbfdff;
+  font-size: 14px;
+}
+
+.input:focus {
+  outline: 2px solid #c7e0ff;
+  border-color: #90bfff;
+}
+
+.button-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  justify-content: center; /* center the buttons inside the login form */
+  width: 100%;
+  flex-wrap: wrap; /* allow buttons to wrap to a new line */
+  align-items: center;
+}
+
+/* Keep normal buttons sized as before */
+.button-row button {
+  min-width: 64px;
+  height: 40px;
+  border-radius: 8px;
+  background: #042069; /* primary color */
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  padding: 0 12px;
+  order: 0;
+}
+
+/* Make the "Forgot Password?" button wider to make the text fits comfortably */
+.button-row button:nth-child(2) {
+  min-width: 160px;
+  padding: 0 18px;
+}
+
+/* Wrapper for the Cancel button so it is always centered on its own row */
+.cancel-wrap {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 12px;
+}
+
+/* Make the cancel button take its own row and center it */
+.cancel-button {
+  max-width: 220px;
+  margin: 12px 0 0;
+  padding: 0 12px;
+  background: #042069;
+  color: #fff;
+  border: none;
+}
+
+.cancel-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(4,32,105,0.18);
+}
+
+/* Slightly tighter focus for other buttons as well */
+.button-row button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(199,224,255,0.9);
+}
