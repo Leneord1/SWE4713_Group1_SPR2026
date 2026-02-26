@@ -1,6 +1,6 @@
 import React from 'react'
-import './LoginPage.css'
-import logo from '../assets/Images/resourceDirectory/logo.png'
+import '../LoginPage.css'
+import logo from '../../assets/Images/resourceDirectory/logo.png'
 import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {

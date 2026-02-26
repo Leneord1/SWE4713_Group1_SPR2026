@@ -1,7 +1,7 @@
 import React from 'react';
-import './welcomeScreen.css';
+import '../welcomeScreen.css';
 import { useNavigate } from 'react-router-dom';
-import logo from '../assets/Images/resourceDirectory/logo.png';
+import logo from '../../assets/Images/resourceDirectory/logo.png';
 
 
 function WelcomeScreen() {

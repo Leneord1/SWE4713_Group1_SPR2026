@@ -1,7 +1,7 @@
 import { HashRouter as Router, Route, Routes } from 'react-router-dom'
-import LoginPage from './LoginPage'
-import WelcomeScreen from './welcomeScreen'
-import DashboardInitial from './initDashboard'
+import LoginPage from './pages/LoginPage'
+import WelcomeScreen from './pages/welcomeScreen'
+import DashboardInitial from './pages/initDashboard'
 import Navbar from './navbar'
 import { AuthProvider } from './AuthContext'
 
