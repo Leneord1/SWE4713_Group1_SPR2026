@@ -63,9 +63,7 @@ function LoginPage() {
           </div>
 
           <div className="cancel-wrap">
-            <button type="button" className="cancel-button" onClick={navToWelcome}>
-              Cancel
-            </button>
+            <button type="button" className="cancel-button" onClick={navToWelcome}>Cancel</button>
           </div>
         </form>
       </main>
