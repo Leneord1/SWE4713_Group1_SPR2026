@@ -1,10 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 import '../LoginPage.css'
 import logo from '../../assets/Images/resourceDirectory/logo.png'
 import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
     const navigate = useNavigate();
+
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleClear = () => {
+        setUsername('');
+        setPassword('');
+    };
 
     const navToWelcome = () => {
         navigate('/');
@@ -31,6 +39,8 @@ function LoginPage() {
             name="username"
             placeholder="Username"
             aria-label="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
 
           <h5>Password</h5>
@@ -40,6 +50,8 @@ function LoginPage() {
             name="password"
             placeholder="Password"
             aria-label="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
 
           <div className="button-row" role="group">
@@ -47,6 +59,7 @@ function LoginPage() {
             <button type="button">Forgot Password?</button>
             <button type="button">Sign Up</button>
             <button type="button" className= "login-button" onClick={navToDash}>Login</button>
+            <button type="button" onClick={handleClear}>Clear</button>
           </div>
 
           <div className="cancel-wrap">
