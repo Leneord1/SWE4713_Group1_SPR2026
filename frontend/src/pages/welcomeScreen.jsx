@@ -10,6 +10,7 @@ function WelcomeScreen() {
     const navToLogin = () => {
         navigate('/login');
     }
+
   return (
     <div className="welcome-screen">
       <header className="login-header">

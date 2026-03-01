@@ -1,5 +1,5 @@
 import React from 'react';
-import '../initDashboard.css';
+import '../global.css';
 import logo from '../../assets/Images/resourceDirectory/logo.png';
 import { useNavigate } from 'react-router-dom';
 

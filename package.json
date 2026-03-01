@@ -1,0 +1,21 @@
+{
+  "name": "swe4713-group1-spr2026",
+  "version": "0.0.0",
+  "description": "SWE4713 Group 1 Spring 2026 Project",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "lint": "cd frontend && npm run lint",
+    "preview": "cd frontend && npm run preview",
+    "test": "cd frontend && npm run test"
+  },
+  "workspaces": [
+    "frontend"
+  ],
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
+

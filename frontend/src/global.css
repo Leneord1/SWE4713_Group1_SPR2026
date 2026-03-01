@@ -1,0 +1,50 @@
+/* Global CSS - Applied to the entire application */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: #f8f9fa;
+  color: #0f172a;
+  line-height: 1.6;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Remove default button styles for custom styling */
+button {
+  font-family: inherit;
+}
+
+/* Remove default input styles */
+input {
+  font-family: inherit;
+}
+
+/* Ensure images scale properly */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Accessibility improvements */
+:focus-visible {
+  outline: 2px solid #0052cc;
+  outline-offset: 2px;
+}
+
