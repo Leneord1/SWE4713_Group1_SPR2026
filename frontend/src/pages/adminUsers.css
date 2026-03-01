@@ -1,0 +1,94 @@
+.admin-page {
+  padding: 24px;
+}
+
+.admin-header h1 {
+  margin: 0 0 4px 0;
+}
+
+.create-user-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0 20px 0;
+}
+.create-user-form input,
+.create-user-form select,
+.create-user-form textarea {
+  min-width: 120px;
+  font-size: 14px;
+}
+
+.create-user-form textarea {
+  resize: vertical;
+}
+
+.create-user-form input,
+.create-user-form select {
+  padding: 8px;
+  font-size: 14px;
+}
+
+.btn {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #2b6cb0;
+  color: white;
+  border: none;
+}
+
+.user-list td textarea {
+  width: 100%;
+  border: none;
+  padding: 0;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.user-list table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* prevent column reflow when cell contents change */
+}
+
+.user-list th, .user-list td {
+  padding: 8px;
+  border-bottom: 1px solid #e6e6e6;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Set stable column widths to avoid shifting when button text changes */
+.user-list th:first-child,
+.user-list td:first-child { width: 12%; }
+.user-list th:nth-child(2),
+.user-list td:nth-child(2) { width: 12%; }
+.user-list th:nth-child(3),
+.user-list td:nth-child(3) { width: 18%; word-break: break-word; white-space: normal; }
+.user-list th:nth-child(4),
+.user-list td:nth-child(4) { width: 12%; }
+.user-list th:nth-child(5),
+.user-list td:nth-child(5) { width: 10%; }
+.user-list th:nth-child(6),
+.user-list td:nth-child(6) { width: 18%; }
+.user-list th:nth-child(7),
+.user-list td:nth-child(7) { width: 5%; }
+.user-list th:nth-child(8),
+.user-list td:nth-child(8) { width: 13%; }
+
+.inactive {
+  opacity: 0.6;
+}
+
+/* Keep action buttons a consistent size so column width doesn't change */
+.user-list .btn {
+  min-width: 100px;
+  display: inline-block;
+  text-align: center;
+}

@@ -38,6 +38,9 @@ function Navbar() {
             <a href="#/dashboard" className="nav-link" onClick={() => handleNavigation('/dashboard')}>Dashboard</a>
           </li>
           <li className="nav-item">
+            <a href="#/admin" className="nav-link" onClick={() => handleNavigation('/admin')}>Manage Users</a>
+          </li>
+          <li className="nav-item">
             <button className="nav-logout-btn" onClick={() => handleNavigation('/login')}>Logout</button>
           </li>
         </ul>
