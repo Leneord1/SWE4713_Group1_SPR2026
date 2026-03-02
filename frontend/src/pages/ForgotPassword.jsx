@@ -9,9 +9,7 @@ function ForgotPasswordPage() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // TODO: Implement password reset logic
         console.log('Password reset requested for:', email);
-        // After successful submission, you might want to navigate or show a message
     };
 
     const handleClear = () => {

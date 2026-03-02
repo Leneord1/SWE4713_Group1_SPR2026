@@ -5,6 +5,7 @@ import DashboardInitial from './pages/initDashboard'
 import Navbar from './navbar'
 import { AuthProvider } from './AuthContext'
 import ForgotPasswordPage from './pages/ForgotPassword'
+import SignUpPage from './pages/SignUpPage'
 function App() {
   return(
     <AuthProvider>
@@ -15,6 +16,7 @@ function App() {
           <Route path="/login" element={<LoginPage/>} />
           <Route path="/dashboard" element={<DashboardInitial/>} />
           <Route path="/forgot-password" element={<ForgotPasswordPage/>} />
+          <Route path="/signup" element={<SignUpPage/>} />
         </Routes>
       </Router>
     </AuthProvider>

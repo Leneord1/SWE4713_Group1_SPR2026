@@ -84,6 +84,33 @@
   border-color: #90bfff;
 }
 
+.input-error {
+  border-color: #dc2626;
+  background: #fef2f2;
+}
+
+.input-error:focus {
+  outline: 2px solid #fca5a5;
+  border-color: #dc2626;
+}
+
+.error-messages {
+  color: #dc2626;
+  font-size: 13px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.error-messages ul {
+  margin: 4px 0;
+  padding-left: 20px;
+  list-style-type: disc;
+}
+
+.error-messages li {
+  margin: 2px 0;
+}
+
 .button-row {
   display: flex;
   gap: 12px;
