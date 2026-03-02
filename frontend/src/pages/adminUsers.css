@@ -19,10 +19,6 @@
   font-size: 14px;
 }
 
-.create-user-form textarea {
-  resize: vertical;
-}
-
 .create-user-form input,
 .create-user-form select {
   padding: 8px;
@@ -40,14 +36,6 @@
   border: none;
 }
 
-.user-list td textarea {
-  width: 100%;
-  border: none;
-  padding: 0;
-  resize: vertical;
-  font-family: inherit;
-  font-size: 14px;
-}
 
 .user-list table {
   width: 100%;
@@ -70,7 +58,7 @@
 .user-list th:nth-child(2),
 .user-list td:nth-child(2) { width: 12%; }
 .user-list th:nth-child(3),
-.user-list td:nth-child(3) { width: 18%; word-break: break-word; white-space: normal; }
+.user-list td:nth-child(3) { width: 18%; }
 .user-list th:nth-child(4),
 .user-list td:nth-child(4) { width: 12%; }
 .user-list th:nth-child(5),
