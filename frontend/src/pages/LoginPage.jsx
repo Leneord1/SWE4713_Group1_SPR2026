@@ -20,6 +20,9 @@ function LoginPage() {
     const navToDash = () => {
         navigate('/dashboard');
     }
+    const navToForgotPassword = () => {
+        navigate('/forgot-password');
+    }
   return (
     <div className="login-page">
       <header className="login-header">
@@ -56,7 +59,7 @@ function LoginPage() {
 
           <div className="button-row" role="group">
             <button type="submit">Help</button>
-            <button type="button">Forgot Password?</button>
+            <button type="button" onClick={navToForgotPassword}>Forgot Password?</button>
             <button type="button">Sign Up</button>
             <button type="button" className= "login-button" onClick={navToDash}>Login</button>
             <button type="button" onClick={handleClear}>Clear</button>
