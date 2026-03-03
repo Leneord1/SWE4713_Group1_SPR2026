@@ -6,6 +6,9 @@ import Navbar from './navbar'
 import { AuthProvider } from './AuthContext'
 import ForgotPasswordPage from './pages/ForgotPassword'
 import SignUpPage from './pages/SignUpPage'
+import AdminDashboard from './pages/admin-dashboard';
+import AccountantDashboard from './pages/accountant-dashboard'
+import ManagerDashboard from './pages/manager-dashboard'
 
 function AppLayout() {
   const location = useLocation();
@@ -18,8 +21,11 @@ function AppLayout() {
         <Route path="/" element={<WelcomeScreen/>} />
         <Route path="/login" element={<LoginPage/>} />
         <Route path="/dashboard" element={<DashboardInitial/>} />
+        <Route path='/admin-dashboard' element={<AdminDashboard />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage/>} />
         <Route path="/signup" element={<SignUpPage/>} />
+        <Route path="/accountant-dashboard" element={<AccountantDashboard/>} />
+        <Route path="/manager-dashboard" element={<ManagerDashboard/>} />
       </Routes>
     </>
   );
