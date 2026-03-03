@@ -6,7 +6,7 @@ Team Lead- Sankalp Amaravadi
 Team Scribe/ Back end lead- Elijah Giusto 
 Team support- Calvin Crose
 Front ened lead- Jonah Smith
-QA/Front end support- Cristopher Stripoli
+QA/Front end support- Christopher Stropoli
 ~~~
 ## Technologies Used 
 ~~~
