@@ -1,3 +1,8 @@
+export async function sendNewAccountRequest(recipientAddress, subject, message){
+    emailjs.send("service_h5dzete","template_rot6eaf");
+}
+
+
 // import nodemailer from 'nodemailer';
 
 // //https://nodemailer.com/usage/using-gmail
