@@ -1,6 +1,6 @@
 import { supabase } from '../supabaseClient';
 import { hashPassword } from '../utils/passwordHash';
-
+import { sendNewAccountRequest } from './emailService';
 export async function createUser(email, fName, lName, address, dob, password, role) {
   try {
     const hashedPassword = await hashPassword(password);
@@ -26,6 +26,29 @@ export async function createUser(email, fName, lName, address, dob, password, ro
     console.error('Error creating user:', err);
     throw err;
   }
+}
+
+export async function createUserRequest(email, fName, lName, address, dob, password){
+    try {
+        const hashedPassword = await hashPassword(password);
+        const { data, error } = await supabase.rpc('create_user_request', {
+            p_email:    email,
+            p_f_name:   fName,
+            p_l_name:   lName,
+            p_address:  address,
+            p_dob:      dob,          // 'YYYY-MM-DD'
+            p_password: hashedPassword,
+        });
+        
+        console.log('User request JSON:', data);
+        const fullName = `${fName} ${lName}`
+        sendNewAccountRequest(fullName);
+        return data;    
+    } 
+    catch (error) {
+        console.error('Error creating user request:', error);
+        throw error;
+    }
 }
 
 export async function getPasswords(){

@@ -1,5 +1,10 @@
-export async function sendNewAccountRequest(recipientAddress, subject, message){
-    emailjs.send("service_h5dzete","template_rot6eaf");
+export async function sendNewAccountRequest(name){
+    emailjs.send("service_h5dzete","template_rot6eaf",
+        {
+            email: "betterfinance3@gmail.com",
+            name: name,
+        }
+    );
 }
 
 

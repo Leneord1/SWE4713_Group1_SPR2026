@@ -4,6 +4,7 @@ import logo from '../../assets/Images/resourceDirectory/logo.png'
 import { useNavigate } from 'react-router-dom';
 import { validatePassword } from '../utils/passwordValidation';
 import { hashPassword } from '../utils/passwordHash';
+import { createUser, createUserRequest } from '../services/userService';
 
 function SignUpPage() {
     const navigate = useNavigate();
@@ -56,6 +57,8 @@ function SignUpPage() {
 
     const todayDateString = getTodayLocalDateString();
 
+
+    
     const handleEmailChange = (e) => {
         const value = e.target.value;
         setemail(value);
@@ -216,7 +219,7 @@ function SignUpPage() {
                 ],
             });
 
-            // TODO: send this request to Supabase / backend
+            createUserRequest(email, firstName, lastName, address, dob, password);
         } catch (error) {
             console.error('Error hashing password:', error);
         }
