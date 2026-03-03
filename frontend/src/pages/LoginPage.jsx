@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import '../LoginPage.css'
 import logo from '../../assets/Images/resourceDirectory/logo.png'
 import { useNavigate } from 'react-router-dom';
+import { getPasswords } from '../services/userService';
 
 function LoginPage() {
     const navigate = useNavigate();
@@ -25,6 +26,14 @@ function LoginPage() {
     }
     const navToSignUp = () => {
         navigate('/signup');
+    }
+
+    const handleLogin = async () => {
+        try {
+            await getPasswords();
+        } catch (error) {
+            console.error('Error getting user passwords:', error);
+        }
     }
   return (
     <div className="login-page">
@@ -64,7 +73,7 @@ function LoginPage() {
             <button type="submit">Help</button>
             <button type="button" onClick={navToForgotPassword}>Forgot Password?</button>
             <button type="button" onClick={navToSignUp}>Sign Up</button>
-            <button type="button" className= "login-button" onClick={navToDash}>Login</button>
+            <button type="button" className= "login-button" onClick={handleLogin}>Login</button>
             <button type="button" onClick={handleClear}>Clear</button>
           </div>
 
