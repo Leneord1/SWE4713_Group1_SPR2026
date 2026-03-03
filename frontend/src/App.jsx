@@ -29,14 +29,7 @@ function App() {
   return(
     <AuthProvider>
       <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<WelcomeScreen/>} />
-          <Route path="/login" element={<LoginPage/>} />
-          <Route path="/dashboard" element={<DashboardInitial/>} />
-          <Route path="*" element={<h1>404 Not Found</h1>} />
-          <Route path="/profile" element={<h1>Profile Page</h1>} />
-        </Routes>
+        <AppLayout />
       </Router>
     </AuthProvider>
   )
