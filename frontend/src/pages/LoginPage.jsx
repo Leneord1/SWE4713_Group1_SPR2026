@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import '../LoginPage.css'
 import logo from '../../assets/Images/resourceDirectory/logo.png'
 import { useNavigate } from 'react-router-dom';
+import bcrypt from 'bcryptjs';
+import { supabase } from '../supabaseClient';
 import { createUser } from '../services/userService';
 
 function LoginPage() {
@@ -30,9 +32,55 @@ function LoginPage() {
 
     const handleLogin = async () => {
         try {
-            //await createUser("betterfinance3@gmail.com", "better", "finance", "123 Marietta, GA 30067", "2000-07-07", "password_1", "administrator");
-        } catch (error) {
-            console.error('Error getting user passwords:', error);
+          // Get user by username
+          const { data: userData, error: userError } = await supabase
+          .from('user')
+          .select('*')
+          .eq('username', username)
+          .single();
+
+          if (userError || !userData) {
+            alert('User not found');
+            return;
+          }
+
+          // Get password hash from password table
+          const { data: passwordData, error: passwordError } = await supabase
+          .from('userPasswords')
+          .select('password_hash')
+          .eq('userID', userData.userID)
+          .single();
+
+          if (passwordError || !passwordData) {
+            alert('Password record not found');
+            return;
+          }
+
+          // Compare entered password with stored hash
+          const isMatch = await bcrypt.compare(password, passwordData.password_hash);
+
+          if (!isMatch) {
+            alert('Invalid password');
+            return;
+          }
+
+          // Route to correct dashboard based on role
+          if (userData.role === 'administrator') {
+            navigate('/admin-dashboard');
+          }
+          else if (userData.role === 'manager') {
+            navigate('/manager-dashboard');
+          }
+          else if (userData.role === 'accountant') {
+            navigate('/accountant-dashboard')
+          }
+          else {
+            navigate('/');
+          }
+        }
+
+        catch (error) {
+          console.error('Login error:', error);
         }
     }
   return (
