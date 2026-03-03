@@ -1,3 +1,6 @@
+import emailjs from '@emailjs/browser';
+import { GoTrueClient } from '@supabase/supabase-js';
+
 export async function sendNewAccountRequest(name){
     emailjs.send("service_h5dzete","template_rot6eaf",
         {
@@ -7,6 +10,27 @@ export async function sendNewAccountRequest(name){
     );
 }
 
+export async function sendAdminEmail(recipientEmail, recipientName, subject, message){
+    try {
+        const response = await emailjs.send(
+            "service_h5dzete",
+            "template_admin_email",
+            {
+                from_email: "betterfinance3@gmail.com",
+                to_email: recipientEmail,
+                to_name: recipientName,
+                subject: subject,
+                message: message,
+            }
+        );
+
+        console.log("Admin email sent:", response.status);
+        return true;
+    } catch (error) {
+        console.error("Admin email error:", error);
+        throw error;
+    }
+}
 
 // import nodemailer from 'nodemailer';
 

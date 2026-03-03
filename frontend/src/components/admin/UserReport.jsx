@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { getAllUsers } from '../../services/adminService';
+import { sendAdminEmail } from '../../services/emailService';
 
 function UserReport() {
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [emailSubject, setEmailSubject] = useState("");
+    const [emailMessage, setEmailMessage] = useState("");
+    const [sending, setSending] = useState(false);
     const [users, setUsers] = useState([])
 
     useEffect(() => {
@@ -16,6 +21,36 @@ function UserReport() {
             console.error('Error fetching users:', err)
         }
     }
+
+    const handleSendEmail = async () => {
+        if (!emailSubject || !emailMessage) {
+            alert("Subject and message required");
+            return;
+        }
+
+        try {
+            setSending(true);
+
+            await sendAdminEmail(
+            selectedUser.email,
+            selectedUser.fName,
+            emailSubject,
+            emailMessage
+            );
+
+            alert("Email sent successfully");
+
+            setEmailSubject("");
+            setEmailMessage("");
+            setSelectedUser(null);
+
+        } catch (err) {
+            console.error(err);
+            alert("Failed to send email");
+        } finally {
+            setSending(false);
+        }
+    };
 
     return (
         <div>
@@ -42,10 +77,45 @@ function UserReport() {
                             <td>{user.email}</td>
                             <td>{user.role}</td>
                             <td>{user.status ? "Active" : "Inactive"}</td>
+                            <td>
+                                <button onClick={() => setSelectedUser(user)}>
+                                    Email
+                                </button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+
+            {selectedUser && (
+                <div style={{ marginTop: "30px", padding: "20px", border: "1px solid #ccc" }}>
+                    <h3>Email {selectedUser.fName} ({selectedUser.email})</h3>
+
+                    <input
+                        type="text"
+                        placeholder="Subject"
+                        value={emailSubject}
+                        onChange={(e) => setEmailSubject(e.target.value)}
+                        style={{ width: "100%", marginBottom: "10px" }}
+                    />
+
+                    <textarea
+                    placeholder="Message"
+                    value={emailMessage}
+                    onChange={(e) => setEmailMessage(e.target.value)}
+                    rows={6}
+                    style={{ width: "100%", marginBottom: "10px" }}
+                    />
+
+                    <button onClick={handleSendEmail} disabled={sending}>
+                    {sending ? "Sending..." : "Send Email"}
+                    </button>
+
+                    <button onClick={() => setSelectedUser(null)} style={{ marginLeft: "10px" }}>
+                    Cancel
+                    </button>
+                </div>
+            )}
         </div>
     )
 }
