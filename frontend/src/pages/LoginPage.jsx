@@ -64,6 +64,19 @@ function LoginPage() {
             return;
           }
 
+          // Check for suspension
+          const today = new Date().toISOString().split('T')[0];
+
+          if (
+            userData.suspendFrom &&
+            userData.suspendedTill &&
+            today >= userData.suspendFrom &&
+            today <= userData.suspendedTill
+          ) {
+            alert('Your account is currently suspended.');
+            return;
+          }
+
           // Route to correct dashboard based on role
           if (userData.role === 'administrator') {
             navigate('/admin-dashboard');

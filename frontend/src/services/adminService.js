@@ -34,16 +34,22 @@ export const getExpiredPasswords = async () => {
 // Suspend user
 export const suspendUser = async (userID, startDate, endDate) => {
   const { data, error } = await supabase
-    .from('users')
+    .from('user')
     .update({
       suspendFrom: startDate,
-      suspendedTill: endDate
+      suspendedTill: endDate,
+      status: false
     })
     .eq('userID', userID)
+    .select()
 
   if (error) {
-    console.error(error)
+    console.error("Supabase suspend error:", error)
     throw error
+  }
+
+  if (!data || data.length === 0) {
+    throw new Error("User not foound.")
   }
 
   return data
