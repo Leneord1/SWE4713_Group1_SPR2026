@@ -9,6 +9,8 @@ import SignUpPage from './pages/SignUpPage'
 import AdminDashboard from './pages/admin-dashboard';
 import AccountantDashboard from './pages/accountant-dashboard'
 import ManagerDashboard from './pages/manager-dashboard'
+import UserAccountRequestPage from './pages/user-account-request'
+import CreateUserPage from './pages/CreateUserPage'
 
 function AppLayout() {
   const location = useLocation();
@@ -22,6 +24,8 @@ function AppLayout() {
         <Route path="/login" element={<LoginPage/>} />
         <Route path="/dashboard" element={<DashboardInitial/>} />
         <Route path='/admin-dashboard' element={<AdminDashboard />} />
+        <Route path="/admin/user-account-request" element={<UserAccountRequestPage />} />
+        <Route path="/admin/create-user" element={<CreateUserPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage/>} />
         <Route path="/signup" element={<SignUpPage/>} />
         <Route path="/accountant-dashboard" element={<AccountantDashboard/>} />

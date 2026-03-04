@@ -34,7 +34,6 @@ function LoginPage() {
 
     const handleLogin = async () => {
         try {
-          // Get user by username
           const { data: userData, error: userError } = await supabase
           .from('user')
           .select('*')
@@ -46,7 +45,31 @@ function LoginPage() {
             return;
           }
 
-          // Get password hash from password table
+          // Check for suspension first
+          const today = new Date();
+          
+          if (userData.suspendedTill) {
+            const suspendedTillDate = new Date(userData.suspendedTill);
+            
+            // Check if current time is within suspension period
+            if (today <= suspendedTillDate) {
+              const millisecondsRemaining = suspendedTillDate - today;
+              const minutesRemaining = Math.ceil(millisecondsRemaining / (1000 * 60));
+              alert(`Your account is currently suspended. Please try again in ${minutesRemaining} minute${minutesRemaining !== 1 ? 's' : ''}.`);
+              return;
+            } else {
+              // Suspension period has passed, clear it and reset attempts
+              await supabase
+                .from('user')
+                .update({ 
+                  "suspendFrom": null,
+                  "suspendedTill": null,
+                  "loginAttempts": 3
+                })
+                .eq('userID', userData.userID);
+            }
+          }
+
           const { data: passwordData, error: passwordError } = await supabase
           .from('userPasswords')
           .select('password_hash')
@@ -58,38 +81,65 @@ function LoginPage() {
             return;
           }
 
-          // Compare entered password with stored hash
           const isMatch = await bcrypt.compare(password, passwordData.password_hash);
 
           if (!isMatch) {
-            alert('Invalid password');
-            return;
+            const currentAttempts = userData.loginAttempts ?? 3;
+            const newAttempts = Math.max(0, currentAttempts - 1);
+            
+            if (newAttempts === 0) {
+              // suspends account for 1 min
+              const now = new Date();
+              const suspendedTillDate = new Date(now.getTime() + 60 * 1000);
+            
+              const suspendFrom = now.toISOString();
+              const suspendedTill = suspendedTillDate.toISOString();
+              
+              await supabase
+                .from('user')
+                .update({ 
+                  "loginAttempts": 0,
+                  "suspendFrom": suspendFrom,
+                  "suspendedTill": suspendedTill
+                })
+                .eq('userID', userData.userID);
+              
+              alert('Too many failed login attempts. Your account has been suspended for 1 minute.');
+              return;
+            } else {
+              await supabase
+                .from('user')
+                .update({ "loginAttempts": newAttempts })
+                .eq('userID', userData.userID);
+              
+              const remainingAttempts = newAttempts;
+              alert(`Invalid password. ${remainingAttempts} attempt${remainingAttempts !== 1 ? 's' : ''} remaining.`);
+              return;
+            }
           }
 
-          // Check for suspension
-          const today = new Date().toISOString().split('T')[0];
+          await supabase
+            .from('user')
+            .update({ "loginAttempts": 3 })
+            .eq('userID', userData.userID);
 
-          if (
-            userData.suspendFrom &&
-            userData.suspendedTill &&
-            today >= userData.suspendFrom &&
-            today <= userData.suspendedTill
-          ) {
-            alert('Your account is currently suspended.');
-            return;
-          }
+          const { data: updatedUserData, error: refreshError } = await supabase
+            .from('user')
+            .select('*')
+            .eq('userID', userData.userID)
+            .single();
 
-          // Store user info and wait for it to be set in AuthContext
-          await loginWithUserData(userData);
+          const finalUserData = updatedUserData || userData;
 
-          // Route to correct dashboard based on role (after user data is loaded)
-          if (userData.role === 'administrator') {
+          await loginWithUserData(finalUserData);
+
+          if (finalUserData.role === 'administrator') {
             navigate('/admin-dashboard');
           }
-          else if (userData.role === 'manager') {
+          else if (finalUserData.role === 'manager') {
             navigate('/manager-dashboard');
           }
-          else if (userData.role === 'accountant') {
+          else if (finalUserData.role === 'accountant') {
             navigate('/accountant-dashboard')
           }
           else {

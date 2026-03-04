@@ -18,6 +18,24 @@ function Navbar() {
     setIsMenuOpen(false);
   };
 
+  const handleDashboardNavigation = () => {
+    if (user && user.role) {
+      if (user.role === 'administrator') {
+        handleNavigation('/admin-dashboard');
+        return;
+      }
+      if (user.role === 'manager') {
+        handleNavigation('/manager-dashboard');
+        return;
+      }
+      if (user.role === 'accountant') {
+        handleNavigation('/accountant-dashboard');
+        return;
+      }
+    }
+    handleNavigation('/dashboard');
+  };
+
   const handleLogout = async () => {
     await logout();
     navigate('/login');
@@ -26,7 +44,13 @@ function Navbar() {
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <div className="navbar-logo" onClick={() => handleNavigation('/')}>
+        <div
+          className="navbar-logo"
+          onClick={(e) => {
+            e.preventDefault();
+            handleDashboardNavigation();
+          }}
+        >
           <img src={logo} alt="App Logo" className="navbar-logo-img" />
           <span className="navbar-brand">Dashboard</span>
         </div>
@@ -39,11 +63,39 @@ function Navbar() {
 
         <ul className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
           <li className="nav-item">
-            <a href="#/" className="nav-link" onClick={() => handleNavigation('/')}>Home</a>
+            <a
+              href="#"
+              className="nav-link"
+              onClick={(e) => {
+                e.preventDefault();
+                handleDashboardNavigation();
+              }}
+            >
+              Dashboard
+            </a>
           </li>
-          <li className="nav-item">
-            <a href="#/dashboard" className="nav-link" onClick={() => handleNavigation('/dashboard')}>Dashboard</a>
-          </li>
+          {user && user.role === 'administrator' && (
+            <>
+              <li className="nav-item">
+                <a
+                  href="#/admin/user-account-request"
+                  className="nav-link"
+                  onClick={() => handleNavigation('/admin/user-account-request')}
+                >
+                  User Account Requests
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  href="#/admin/create-user"
+                  className="nav-link"
+                  onClick={() => handleNavigation('/admin/create-user')}
+                >
+                  Create User
+                </a>
+              </li>
+            </>
+          )}
           {user && (
             <li className="nav-item nav-user-section">
               <div className="nav-user-display">
@@ -54,7 +106,7 @@ function Navbar() {
                       alt={`${user.username}'s profile`}
                       className="nav-user-img"
                       onError={(e) => {
-                        // Fallback to placeholder if image fails to load
+                        // placeholder if image fails to load
                         e.target.style.display = 'none';
                         e.target.nextSibling.style.display = 'flex';
                       }}

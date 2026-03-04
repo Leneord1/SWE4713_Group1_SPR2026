@@ -43,7 +43,6 @@ function SignUpPage() {
     const [securityQuestionsError, setSecurityQuestionsError] = useState('');
 
     const isValidEmail = (value) => {
-        // Basic validity check: has "@" and "." in expected positions (e.g. a@b.com)
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
     };
 
@@ -82,7 +81,6 @@ function SignUpPage() {
             return;
         }
 
-        // Defensive: max= blocks UI selection, but this covers manual edits too
         if (value > todayDateString) {
             setDobError('Date of birth cannot be in the future.');
         } else {
@@ -146,7 +144,6 @@ function SignUpPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Step 1 submit: validate info + password, then move to security questions
         if (step === 1) {
             const emailValid = isValidEmail(email);
             setShowEmailError(true);
@@ -182,7 +179,6 @@ function SignUpPage() {
             return;
         }
 
-        // Step 2 submit: validate security questions, then finalize
         setSecurityQuestionsError('');
 
         if (
@@ -219,9 +215,30 @@ function SignUpPage() {
                 ],
             });
 
-            createUserRequest(email, firstName, lastName, address, dob, password, securityQuestionOptions.indexOf(securityQuestion1)+1, securityAnswer1, securityQuestionOptions.indexOf(securityQuestion2)+1, securityAnswer2, securityQuestionOptions.indexOf(securityQuestion3)+1, securityAnswer3);
+            const result = await createUserRequest(
+                email,
+                firstName,
+                lastName,
+                address,
+                dob,
+                password,
+                securityQuestionOptions.indexOf(securityQuestion1) + 1,
+                securityAnswer1,
+                securityQuestionOptions.indexOf(securityQuestion2) + 1,
+                securityAnswer2,
+                securityQuestionOptions.indexOf(securityQuestion3) + 1,
+                securityAnswer3
+            );
+
+            if (!result) {
+                alert('Signup request could not be created. Please try again.');
+                return;
+            }
+
+            navigate('/login');
         } catch (error) {
-            console.error('Error hashing password:', error);
+            console.error('Error creating signup request:', error);
+            alert('Signup request failed. Please check your information and try again.');
         }
     };
 
