@@ -5,9 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import bcrypt from 'bcryptjs';
 import { supabase } from '../supabaseClient';
 import { createUser } from '../services/userService';
+import { useAuth } from '../AuthContext';
 
 function LoginPage() {
     const navigate = useNavigate();
+    const { loginWithUserData } = useAuth();
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -77,7 +79,10 @@ function LoginPage() {
             return;
           }
 
-          // Route to correct dashboard based on role
+          // Store user info and wait for it to be set in AuthContext
+          await loginWithUserData(userData);
+
+          // Route to correct dashboard based on role (after user data is loaded)
           if (userData.role === 'administrator') {
             navigate('/admin-dashboard');
           }

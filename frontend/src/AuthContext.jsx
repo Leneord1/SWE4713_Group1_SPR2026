@@ -1,34 +1,49 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from './supabaseClient';
 
-// Create Auth Context
 const AuthContext = createContext();
 
-// Auth Provider Component
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Check current user on mount
+    const storedUser = sessionStorage.getItem('currentUser');
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error parsing stored user:', err);
+        sessionStorage.removeItem('currentUser');
+      }
+    }
+
     const checkUser = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
-        setUser(user);
+        if (!storedUser && user) {
+          setUser(user);
+        }
       } catch (err) {
-        console.error('Error checking user:', err);
-        setError(err.message);
+        if (!storedUser) {
+          console.error('Error checking user:', err);
+        }
       } finally {
-        setLoading(false);
+        if (!storedUser) {
+          setLoading(false);
+        }
       }
     };
 
     checkUser();
 
-    // Subscribe to auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user || null);
+      if (!sessionStorage.getItem('currentUser')) {
+        setUser(session?.user || null);
+      }
     });
 
     return () => {
@@ -66,12 +81,47 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const loginWithUserData = async (userData) => {
+    try {
+      setError(null);
+      const userInfo = {
+        userID: userData.userID,
+        username: userData.username,
+        email: userData.email,
+        role: userData.role,
+        fName: userData.fName,
+        lName: userData.lName,
+        picture_path: userData.picture_path,
+        status: userData.status,
+        createdAt: userData.createdAt,
+        passwordExpires: userData.passwordExpires,
+        address: userData.address,
+        dob: userData.dob,
+        loginAttempts: userData.loginAttempts,
+        suspendFrom: userData.suspendFrom,
+        suspendedTill: userData.suspendedTill,
+      };
+      sessionStorage.setItem('currentUser', JSON.stringify(userInfo));
+      setUser(userInfo);
+      setLoading(false);
+      return userInfo;
+    } catch (err) {
+      setError(err.message);
+      throw err;
+    }
+  };
+
   const logout = async () => {
     try {
       setError(null);
+      console.log('Current user before logout:', user);
+      
+      sessionStorage.removeItem('currentUser');
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
       setUser(null);
+      
+      console.log('Current user after logout:', null);
     } catch (err) {
       setError(err.message);
       throw err;
@@ -83,6 +133,7 @@ export function AuthProvider({ children }) {
     loading,
     error,
     login,
+    loginWithUserData,
     signup,
     logout,
     supabase,
@@ -91,7 +142,6 @@ export function AuthProvider({ children }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
-// Custom hook to use auth context
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {

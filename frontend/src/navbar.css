@@ -79,6 +79,81 @@
   border-bottom-color: #ffffff;
 }
 
+/* User Display Section */
+.nav-user-section {
+  margin-left: auto;
+  margin-right: 20px;
+}
+
+.nav-user-display {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.nav-user-display:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.nav-user-avatar {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #9CA3AF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.nav-user-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nav-user-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #9CA3AF;
+}
+
+.nav-user-placeholder svg {
+  width: 24px;
+  height: 24px;
+}
+
+.nav-user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nav-username {
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+.nav-user-role {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 12px;
+  font-weight: 400;
+  text-transform: capitalize;
+  line-height: 1.2;
+}
+
 /* Logout Button */
 .nav-logout-btn {
   margin-left: 10px;
@@ -173,6 +248,17 @@
     background-color: rgba(255, 255, 255, 0.15);
     border-right-color: #ffffff;
     border-bottom: none;
+  }
+
+  .nav-user-section {
+    margin: 15px auto;
+    width: 100%;
+  }
+
+  .nav-user-display {
+    justify-content: center;
+    width: fit-content;
+    margin: 0 auto;
   }
 
   .nav-logout-btn {

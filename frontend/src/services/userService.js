@@ -113,6 +113,28 @@ export async function getPasswords(){
     }
 }
 
+/**
+ * Get entire user as JSONB by userID
+ * Returns the complete user object as JSON
+ */
+export async function getUser(userId) {
+  try {
+    const { data, error } = await supabase.rpc('get_user', {
+      p_userid: userId,
+    });
+
+    if (error) {
+      console.error('Error getting user:', error);
+      throw error;
+    }
+
+    return data; // Returns JSONB user object
+  } catch (error) {
+    console.error('Error in getUser:', error);
+    throw error;
+  }
+}
+
 export async function checkEmail(email){
   try {
     const { data, error } = await supabase.rpc('check_email', { p_email: email });
