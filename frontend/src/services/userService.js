@@ -1,18 +1,43 @@
 import { supabase } from '../supabaseClient';
 import { hashPassword } from '../utils/passwordHash';
 import { sendNewAccountRequest } from './emailService';
-export async function createUser(email, fName, lName, address, dob, password, role) {
+
+export async function createUser(
+  email,
+  fName,
+  lName,
+  address,
+  dob,
+  password,
+  role,
+  questionId1 = null,
+  answer1 = null,
+  questionId2 = null,
+  answer2 = null,
+  questionId3 = null,
+  answer3 = null
+) {
   try {
     const hashedPassword = await hashPassword(password);
 
+    const hashedAnswer1 = answer1 ? await hashPassword(answer1) : null;
+    const hashedAnswer2 = answer2 ? await hashPassword(answer2) : null;
+    const hashedAnswer3 = answer3 ? await hashPassword(answer3) : null;
+
     const { data, error } = await supabase.rpc('create_user', {
-      p_email:    email,
-      p_f_name:   fName,
-      p_l_name:   lName,
-      p_address:  address,
-      p_dob:      dob,
-      p_password: hashedPassword,
-      p_role:     role,  // REQUIRED: pass 'administrator' | 'manager' | 'accountant'
+      p_email:       email,
+      p_f_name:      fName,
+      p_l_name:      lName,
+      p_address:     address,
+      p_dob:         dob,
+      p_password:    hashedPassword,
+      p_role:        role,  // REQUIRED: pass 'administrator' | 'manager' | 'accountant'
+      p_questionid1: questionId1,
+      p_secanswer1:  hashedAnswer1,
+      p_questionid2: questionId2,
+      p_secanswer2:  hashedAnswer2,
+      p_questionid3: questionId3,
+      p_secanswer3:  hashedAnswer3,
     });
 
     if (error) {
@@ -28,28 +53,44 @@ export async function createUser(email, fName, lName, address, dob, password, ro
   }
 }
 
-export async function createUserRequest(email, fName, lName, address, dob, password, questionId1, answer1, questionId2, answer2, questionId3, answer3){
+export async function createUserRequest(
+  email,
+  fName,
+  lName,
+  address,
+  dob,
+  password,
+  questionId1,
+  answer1,
+  questionId2,
+  answer2,
+  questionId3,
+  answer3
+) {
     try {
         const hashedPassword = await hashPassword(password);
+        const hashedAnswer1 = answer1 ? await hashPassword(answer1) : null;
+        const hashedAnswer2 = answer2 ? await hashPassword(answer2) : null;
+        const hashedAnswer3 = answer3 ? await hashPassword(answer3) : null;
+
         const { data, error } = await supabase.rpc('create_user_request', {
-            p_email:       email,
-            p_f_name:      fName,
-            p_l_name:      lName,
-            p_address:     address,
-            p_dob:         dob,           // 'YYYY-MM-DD'
-            p_password:    hashedPassword,
-            p_questionid1: questionId1,
-            p_secanswer1:  answer1,
-            p_questionid2: questionId2,
-            p_secanswer2:  answer2,
-            p_questionid3: questionId3,
-            p_secanswer3:  answer3,
-          });
-        
+          p_email:       email,
+          p_f_name:      fName,
+          p_l_name:      lName,
+          p_address:     address,
+          p_dob:         dob,
+          p_password:    hashedPassword,
+          p_questionid1: questionId1,
+          p_secanswer1:  hashedAnswer1,
+          p_questionid2: questionId2,
+          p_secanswer2:  hashedAnswer2,
+          p_questionid3: questionId3,
+          p_secanswer3:  hashedAnswer3,
+        });
+
         console.log('User request JSON:', data);
-        const fullName = `${fName} ${lName}`
-        //sendNewAccountRequest(fullName);
-        return data;    
+        const fullName = `${fName} ${lName}`;
+        return data;
     } 
     catch (error) {
         console.error('Error creating user request:', error);
@@ -103,6 +144,8 @@ export async function updateUser({
   return data;
 }
 
+
+
 export async function getPasswords(){
     const { data, error } = await supabase.rpc('get_userpasswords');
 
@@ -113,10 +156,6 @@ export async function getPasswords(){
     }
 }
 
-/**
- * Get entire user as JSONB by userID
- * Returns the complete user object as JSON
- */
 export async function getUser(userId) {
   try {
     const { data, error } = await supabase.rpc('get_user', {
@@ -128,7 +167,7 @@ export async function getUser(userId) {
       throw error;
     }
 
-    return data; // Returns JSONB user object
+    return data;
   } catch (error) {
     console.error('Error in getUser:', error);
     throw error;
@@ -146,10 +185,6 @@ export async function checkEmail(email){
   }
 }
 
-/**
- * Get security questions for a user by email and userID
- * Returns an object with question1, question2, question3 (the question text)
- */
 export async function getUserSecurityQuestions(email, userId) {
   try {
     const { data, error } = await supabase.rpc('get_user_security_questions', {
@@ -162,17 +197,13 @@ export async function getUserSecurityQuestions(email, userId) {
       throw error;
     }
 
-    return data; // { question1: "...", question2: "...", question3: "..." }
+    return data;
   } catch (error) {
     console.error('Error in getUserSecurityQuestions:', error);
     throw error;
   }
 }
 
-/**
- * Verify security answers for a user
- * Returns true if all answers match, false otherwise
- */
 export async function verifySecurityAnswers(email, userId, answer1, answer2, answer3) {
   try {
     const { data, error } = await supabase.rpc('verify_security_answers', {
@@ -188,9 +219,60 @@ export async function verifySecurityAnswers(email, userId, answer1, answer2, ans
       throw error;
     }
 
-    return !!data; // true if all match, false otherwise
+    return !!data;
   } catch (error) {
     console.error('Error in verifySecurityAnswers:', error);
     return false;
+  }
+}
+export async function getAllUserRequests() {
+  try {
+    const { data, error } = await supabase.rpc('get_all_user_requests');
+
+    if (error) {
+      console.error('Error getting user requests (RPC):', error);
+      throw error;
+    }
+    return data || [];
+  } catch (err) {
+    console.error('Error in getAllUserRequests:', err);
+    throw err;
+  }
+}
+
+export async function approveUserRequest(userRequestId, role) {
+  try {
+    const { data, error } = await supabase.rpc('approve_user_request', {
+      p_userrequest_id: userRequestId,
+      p_role: role,
+    });
+
+    if (error) {
+      console.error('Error approving user request (RPC):', error);
+      throw error;
+    }
+
+    return data;
+  } catch (err) {
+    console.error('Error in approveUserRequest:', err);
+    throw err;
+  }
+}
+
+export async function rejectUserRequest(userRequestId) {
+  try {
+    const { data, error } = await supabase.rpc('reject_user_request', {
+      p_userrequest_id: userRequestId,
+    });
+
+    if (error) {
+      console.error('Error rejecting user request (RPC):', error);
+      throw error;
+    }
+
+    return data;
+  } catch (err) {
+    console.error('Error in rejectUserRequest:', err);
+    throw err;
   }
 }
