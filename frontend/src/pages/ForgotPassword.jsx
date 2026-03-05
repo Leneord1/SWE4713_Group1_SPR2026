@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import '../LoginPage.css'
 import logo from '../../assets/Images/resourceDirectory/logo.png'
 import { useNavigate } from 'react-router-dom';
 import { validatePassword } from '../utils/passwordValidation';
+import { checkEmail, getUserSecurityQuestions, verifySecurityAnswers, updateUserPassword, isPasswordReused } from '../services/userService';
 
 function ForgotPasswordPage() {
     const navigate = useNavigate();
@@ -14,10 +15,14 @@ function ForgotPasswordPage() {
     const [email, setEmail] = useState('');
     const [userId, setUserId] = useState('');
 
-    // Step 2: security questions (example questions)
+    // Step 2: security questions
+    const [securityQuestion1, setSecurityQuestion1] = useState('');
+    const [securityQuestion2, setSecurityQuestion2] = useState('');
+    const [securityQuestion3, setSecurityQuestion3] = useState('');
     const [securityAnswer1, setSecurityAnswer1] = useState('');
     const [securityAnswer2, setSecurityAnswer2] = useState('');
     const [securityAnswer3, setSecurityAnswer3] = useState('');
+    const [loadingQuestions, setLoadingQuestions] = useState(false);
 
     // Step 3: new password
     const [newPassword, setNewPassword] = useState('');
@@ -28,7 +33,7 @@ function ForgotPasswordPage() {
 
     const [generalError, setGeneralError] = useState('');
 
-    const handleStartReset = (e) => {
+    const handleStartReset = async (e) => {
         e.preventDefault();
         setGeneralError('');
 
@@ -36,13 +41,41 @@ function ForgotPasswordPage() {
             setGeneralError('Please enter both your email address and user ID.');
             return;
         }
-
-        // TODO: Verify email + userId against the database here
-        // For now, just move to the next step
-        setStep(2);
+        try {
+            const emailExists = await checkEmail(email);
+            console.log('Email exists:', emailExists);
+            if(emailExists) {
+                // Fetch security questions before moving to step 2
+                setLoadingQuestions(true);
+                try {
+                    const questions = await getUserSecurityQuestions(email, userId);
+                    if (questions && questions.question1 && questions.question2 && questions.question3) {
+                        setSecurityQuestion1(questions.question1);
+                        setSecurityQuestion2(questions.question2);
+                        setSecurityQuestion3(questions.question3);
+                        setStep(2);
+                    } else {
+                        setGeneralError('Could not retrieve security questions. Please contact support.');
+                    }
+                } catch (qError) {
+                    console.error('Error fetching security questions:', qError);
+                    setGeneralError('Error loading security questions. Please try again.');
+                } finally {
+                    setLoadingQuestions(false);
+                }
+            }
+            else {
+                setGeneralError('Email does not exist. Please try again.');
+                return;
+            }
+        } catch (error) {
+            console.error('Error checking email:', error);
+            setGeneralError('Error checking email. Please try again.');
+            return;
+        }
     };
 
-    const handleSecurityQuestionsSubmit = (e) => {
+    const handleSecurityQuestionsSubmit = async (e) => {
         e.preventDefault();
         setGeneralError('');
 
@@ -51,9 +84,18 @@ function ForgotPasswordPage() {
             return;
         }
 
-        // TODO: Verify security answers against the database here
-        // For now, just move to the next step
-        setStep(3);
+        // Verify security answers against the database
+        try {
+            const isValid = await verifySecurityAnswers(email, userId, securityAnswer1, securityAnswer2, securityAnswer3);
+            if (isValid) {
+                setStep(3);
+            } else {
+                setGeneralError('One or more security answers are incorrect. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error verifying security answers:', error);
+            setGeneralError('Error verifying answers. Please try again.');
+        }
     };
 
     const handleNewPasswordChange = (e) => {
@@ -85,7 +127,7 @@ function ForgotPasswordPage() {
         }
     };
 
-    const handleNewPasswordSubmit = (e) => {
+    const handleNewPasswordSubmit = async (e) => {
         e.preventDefault();
         setGeneralError('');
 
@@ -102,16 +144,29 @@ function ForgotPasswordPage() {
             return;
         }
 
-        // TODO: Save the new password to the database (hashed) for this user
-        console.log('Password reset complete for:', { email, userId });
+        try {
+            const reused = await isPasswordReused(userId, newPassword);
+            if (reused) {
+                setGeneralError('Password used in the past cannot be used when password is reset.');
+                console.log('Password reused');
+                return;
+            }
 
-        // After successful reset, navigate back to login
-        navigate('/login');
+            await updateUserPassword(parseInt(userId, 10), newPassword);
+            // After successful reset, navigate back to login
+            navigate('/login');
+        } catch (error) {
+            console.error('Error updating password:', error);
+            setGeneralError('Error saving new password. Please try again.');
+        }
     };
 
     const handleClearAll = () => {
         setEmail('');
         setUserId('');
+        setSecurityQuestion1('');
+        setSecurityQuestion2('');
+        setSecurityQuestion3('');
         setSecurityAnswer1('');
         setSecurityAnswer2('');
         setSecurityAnswer3('');
@@ -187,41 +242,50 @@ function ForgotPasswordPage() {
 
                     {step === 2 && (
                         <>
-                            <h5>Security Question 1</h5>
-                            <input
-                                className="input"
-                                type="text"
-                                name="securityAnswer1"
-                                placeholder="What is your mother's maiden name?"
-                                aria-label="security question 1"
-                                value={securityAnswer1}
-                                onChange={(e) => setSecurityAnswer1(e.target.value)}
-                                required
-                            />
+                            {loadingQuestions ? (
+                                <p>Loading security questions...</p>
+                            ) : (
+                                <>
+                                    <h5>Security Question 1</h5>
+                                    <input
+                                        className="input"
+                                        type="text"
+                                        name="securityAnswer1"
+                                        placeholder={securityQuestion1 || 'Loading question...'}
+                                        aria-label="security question 1"
+                                        value={securityAnswer1}
+                                        onChange={(e) => setSecurityAnswer1(e.target.value)}
+                                        required
+                                        disabled={!securityQuestion1}
+                                    />
 
-                            <h5>Security Question 2</h5>
-                            <input
-                                className="input"
-                                type="text"
-                                name="securityAnswer2"
-                                placeholder="What city were you born in?"
-                                aria-label="security question 2"
-                                value={securityAnswer2}
-                                onChange={(e) => setSecurityAnswer2(e.target.value)}
-                                required
-                            />
+                                    <h5>Security Question 2</h5>
+                                    <input
+                                        className="input"
+                                        type="text"
+                                        name="securityAnswer2"
+                                        placeholder={securityQuestion2 || 'Loading question...'}
+                                        aria-label="security question 2"
+                                        value={securityAnswer2}
+                                        onChange={(e) => setSecurityAnswer2(e.target.value)}
+                                        required
+                                        disabled={!securityQuestion2}
+                                    />
 
-                            <h5>Security Question 3</h5>
-                            <input
-                                className="input"
-                                type="text"
-                                name="securityAnswer3"
-                                placeholder="What is your favorite teacher's name?"
-                                aria-label="security question 3"
-                                value={securityAnswer3}
-                                onChange={(e) => setSecurityAnswer3(e.target.value)}
-                                required
-                            />
+                                    <h5>Security Question 3</h5>
+                                    <input
+                                        className="input"
+                                        type="text"
+                                        name="securityAnswer3"
+                                        placeholder={securityQuestion3 || 'Loading question...'}
+                                        aria-label="security question 3"
+                                        value={securityAnswer3}
+                                        onChange={(e) => setSecurityAnswer3(e.target.value)}
+                                        required
+                                        disabled={!securityQuestion3}
+                                    />
+                                </>
+                            )}
 
                             <div className="button-row" role="group">
                                 <button type="button" onClick={handleClearAll}>Clear</button>

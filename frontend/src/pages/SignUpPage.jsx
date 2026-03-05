@@ -1,22 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import '../LoginPage.css'
 import logo from '../../assets/Images/resourceDirectory/logo.png'
 import { useNavigate } from 'react-router-dom';
 import { validatePassword } from '../utils/passwordValidation';
 import { hashPassword } from '../utils/passwordHash';
-import { createUser, createUserRequest } from '../services/userService';
+import { createUser, createUserRequest, getSecurityQuestions } from '../services/userService';
 
 function SignUpPage() {
     const navigate = useNavigate();
-    const securityQuestionOptions = [
-        "What is your mother's maiden name?",
-        "What city were you born in?",
-        "What was the name of your first pet?",
-        "What is your favorite teacher's name?",
-        "What is the name of the street you grew up on?",
-        "What is your favorite movie?",
-        "What is your favorite food?",
-    ];
+    const [securityQuestions, setSecurityQuestions] = useState([]);
 
     const [step, setStep] = useState(1); // 1 = info/password, 2 = security questions
 
@@ -42,8 +34,20 @@ function SignUpPage() {
     const [securityAnswer3, setSecurityAnswer3] = useState('');
     const [securityQuestionsError, setSecurityQuestionsError] = useState('');
 
+    useEffect(() => {
+        const fetchSecurityQuestions = async () => {
+            try {
+                const questions = await getSecurityQuestions();
+                setSecurityQuestions(questions);
+            } catch (error) {
+                console.error('Failed to load security questions:', error);
+            }
+        };
+
+        fetchSecurityQuestions();
+    }, []);
+
     const isValidEmail = (value) => {
-        // Basic validity check: has "@" and "." in expected positions (e.g. a@b.com)
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
     };
 
@@ -82,7 +86,6 @@ function SignUpPage() {
             return;
         }
 
-        // Defensive: max= blocks UI selection, but this covers manual edits too
         if (value > todayDateString) {
             setDobError('Date of birth cannot be in the future.');
         } else {
@@ -146,7 +149,6 @@ function SignUpPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Step 1 submit: validate info + password, then move to security questions
         if (step === 1) {
             const emailValid = isValidEmail(email);
             setShowEmailError(true);
@@ -182,7 +184,6 @@ function SignUpPage() {
             return;
         }
 
-        // Step 2 submit: validate security questions, then finalize
         setSecurityQuestionsError('');
 
         if (
@@ -213,15 +214,36 @@ function SignUpPage() {
                 email,
                 passwordHash: hashedPassword,
                 securityQuestions: [
-                    { question: securityQuestion1, answer: securityAnswer1 },
-                    { question: securityQuestion2, answer: securityAnswer2 },
-                    { question: securityQuestion3, answer: securityAnswer3 },
+                    { questionId: securityQuestion1, answer: securityAnswer1 },
+                    { questionId: securityQuestion2, answer: securityAnswer2 },
+                    { questionId: securityQuestion3, answer: securityAnswer3 },
                 ],
             });
 
-            createUserRequest(email, firstName, lastName, address, dob, password, securityQuestionOptions.indexOf(securityQuestion1)+1, securityAnswer1, securityQuestionOptions.indexOf(securityQuestion2)+1, securityAnswer2, securityQuestionOptions.indexOf(securityQuestion3)+1, securityAnswer3);
+            const result = await createUserRequest(
+                email,
+                firstName,
+                lastName,
+                address,
+                dob,
+                password,
+                securityQuestion1,
+                securityAnswer1,
+                securityQuestion2,
+                securityAnswer2,
+                securityQuestion3,
+                securityAnswer3
+            );
+
+            if (!result) {
+                alert('Signup request could not be created. Please try again.');
+                return;
+            }
+
+            navigate('/login');
         } catch (error) {
-            console.error('Error hashing password:', error);
+            console.error('Error creating signup request:', error);
+            alert('Signup request failed. Please check your information and try again.');
         }
     };
 
@@ -400,17 +422,20 @@ function SignUpPage() {
                                     className="input"
                                     aria-label="security question 1"
                                     value={securityQuestion1}
-                                    onChange={(e) => setSecurityQuestion1(e.target.value)}
+                                    onChange={(e) => setSecurityQuestion1(Number(e.target.value))}
                                     required
                                 >
                                     <option value="" disabled>Select a question</option>
-                                    {securityQuestionOptions.map((q) => (
+                                    {securityQuestions.map((q) => (
                                         <option
-                                            key={q}
-                                            value={q}
-                                            disabled={q === securityQuestion2 || q === securityQuestion3}
+                                            key={q.questionID}
+                                            value={q.questionID}
+                                            disabled={
+                                                q.questionID === securityQuestion2 ||
+                                                q.questionID === securityQuestion3
+                                            }
                                         >
-                                            {q}
+                                            {q.question}
                                         </option>
                                     ))}
                                 </select>
@@ -432,17 +457,20 @@ function SignUpPage() {
                                     className="input"
                                     aria-label="security question 2"
                                     value={securityQuestion2}
-                                    onChange={(e) => setSecurityQuestion2(e.target.value)}
+                                    onChange={(e) => setSecurityQuestion2(Number(e.target.value))}
                                     required
                                 >
                                     <option value="" disabled>Select a question</option>
-                                    {securityQuestionOptions.map((q) => (
+                                    {securityQuestions.map((q) => (
                                         <option
-                                            key={q}
-                                            value={q}
-                                            disabled={q === securityQuestion1 || q === securityQuestion3}
+                                            key={q.questionID}
+                                            value={q.questionID}
+                                            disabled={
+                                                q.questionID === securityQuestion1 ||
+                                                q.questionID === securityQuestion3
+                                            }
                                         >
-                                            {q}
+                                            {q.question}
                                         </option>
                                     ))}
                                 </select>
@@ -464,17 +492,20 @@ function SignUpPage() {
                                     className="input"
                                     aria-label="security question 3"
                                     value={securityQuestion3}
-                                    onChange={(e) => setSecurityQuestion3(e.target.value)}
+                                    onChange={(e) => setSecurityQuestion3(Number(e.target.value))}
                                     required
                                 >
                                     <option value="" disabled>Select a question</option>
-                                    {securityQuestionOptions.map((q) => (
+                                    {securityQuestions.map((q) => (
                                         <option
-                                            key={q}
-                                            value={q}
-                                            disabled={q === securityQuestion1 || q === securityQuestion2}
+                                            key={q.questionID}
+                                            value={q.questionID}
+                                            disabled={
+                                                q.questionID === securityQuestion1 ||
+                                                q.questionID === securityQuestion2
+                                            }
                                         >
-                                            {q}
+                                            {q.question}
                                         </option>
                                     ))}
                                 </select>
